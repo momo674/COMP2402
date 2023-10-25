@@ -19,9 +19,11 @@ public class SkippityFast<T> implements IndexedSSet<T> {
 	protected static class Node<T> {
 		T x;
 		Node<T>[] next;
+		int[] length;
 		public Node(T ix, int h) {
 			x = ix;
 			next = (Node<T>[])Array.newInstance(Node.class, h+1);
+			length = new int[h+1];
 		}
 		public int height() {
 			return next.length - 1;
