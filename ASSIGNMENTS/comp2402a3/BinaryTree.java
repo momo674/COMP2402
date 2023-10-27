@@ -3,6 +3,9 @@ package comp2402a3;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.TreeSet;
+import java.util.HashMap;
+import java.util.Collections;
 
 public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 
@@ -233,8 +236,35 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 	}
 
 	public int leafAndOnlyLeaf() {
-		// TODO: Your code goes here, must avoid recursion
-		return leafAndOnlyLeafHelper(r);
+		
+		
+		//return leafAndOnlyLeafHelper(r);
+		int counter = 0;
+		Node u = r, prev = nil, next;
+		while (u != nil) {
+			if (prev == u.parent) {
+				if (u.left != nil) {
+					next = u.left;
+				} else if (u.right != nil) {
+					next = u.right;
+				}	else {
+					next = u.parent;
+					counter++;
+				}
+			} else if (prev == u.left) {
+				if (u.right != nil) {
+					next = u.right;
+				} else {
+					next = u.parent;
+				}
+			} else {
+				next = u.parent;
+			}
+			prev = u;
+			u = next;
+		}
+
+		return counter;
 	}
 
 	protected int leafAndOnlyLeafHelper(Node u) {
@@ -246,7 +276,34 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 	public int dawnOfSpring() {
 		// TODO: Your code goes here, must avoid recursion
 		if(r == nil)return -1;
-		return dawnOfSpringHelper(r, 0);
+		TreeSet<Integer> set = new TreeSet<>();
+		Node u = r, prev = nil, next;
+		int size = 0;
+		while (u != nil) {
+			if (prev == u.parent) {
+				size++;
+				if (u.left != nil) {
+					next = u.left;
+				} else if (u.right != nil) {
+					next = u.right;
+				}	else {
+					next = u.parent;
+					
+					set.add(depth(u));
+				}
+			} else if (prev == u.left) {
+				if (u.right != nil) {
+					next = u.right;
+				} else {
+					next = u.parent;
+				}
+			} else {
+				next = u.parent;
+			}
+			prev = u;
+			u = next;
+		}
+		return set.first();
 	}
 
 	protected int dawnOfSpringHelper(Node u, int d) {
@@ -260,17 +317,33 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 			return Math.min(dawnOfSpringHelper(u.left, d+1), dawnOfSpringHelper(u.right, d+1));
 	}
 
-	public int monkeyLand() {
-		// TODO: Your code goes here, must avoid recursion
-		int h = height(), max_width = 0;
-		for(int i=0; i<h; i++){
-			int width = monkeyLandHelper(r, 0, i);
-			if(width > max_width)
-				max_width = width;
-		}
-		return max_width;
-	}
+	public int monkeyLand(){
 
+	
+		if (r == nil) {
+			return 0; // If the tree is empty, there are no nodes.
+		}
+	
+		Queue<Node> q = new LinkedList<Node>();
+		q.add(r);
+		int maxNodes = 1; // Initialize the maximum node count to 1 for the root level
+	
+		while (!q.isEmpty()) {
+			int nodesAtCurrentLevel = q.size();
+			if (nodesAtCurrentLevel > maxNodes) {
+				maxNodes = nodesAtCurrentLevel; // Update the maximum node count if necessary
+			}
+	
+			for (int i = 0; i < nodesAtCurrentLevel; i++) {
+				Node u = q.remove();
+				if (u.left != nil) q.add(u.left);
+				if (u.right != nil) q.add(u.right);
+			}
+		}
+	
+		return maxNodes;
+	}
+	
 	protected int monkeyLandHelper(Node u, int d, int D) {
 		if(u == nil) return 0;
 		if(d == D)return 1;

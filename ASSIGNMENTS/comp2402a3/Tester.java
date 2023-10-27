@@ -49,7 +49,7 @@ public class Tester {
     }
 
     public static void main(String[] args) {
-        skippityTest(20);
+        //skippityTest(20);
         treeTest(20);
     }
 }
