@@ -274,7 +274,6 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 	}
 
 	public int dawnOfSpring() {
-		// TODO: Your code goes here, must avoid recursion
 		if(r == nil)return -1;
 		TreeSet<Integer> set = new TreeSet<>();
 		Node u = r, prev = nil, next;
@@ -351,10 +350,68 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 	}
 
 	public String bracketSequence() {
+		if (r == nil) {return ".";}
+
+		StringBuilder sb1 = new StringBuilder();
+        Node u = r, prev = nil, next;
+		bracketSequenceHelper(u, sb1);
 		StringBuilder sb = new StringBuilder();
-		// TODO: Your code goes here, use sb.append(), must avoid recursion
-		bracketSequenceHelper(r, sb);
-		return sb.toString();
+		sb.append("(");
+
+        while (u != nil) {
+            if (prev == u.parent) { //going down tree
+
+				if (u.left != nil){ //going left
+					sb.append("(");
+					next = u.left;
+					
+				}
+				
+				
+
+                else if (u.right != nil){ //going right
+					sb.append(".");
+
+					next = u.right;
+					sb.append("(");
+				}
+
+				
+
+                else{ // going to parent
+					sb.append("..)");
+					next = u.parent;
+				}
+
+
+            } 
+			
+			else if (prev == u.left) { //coming up tree from left
+                if (u.right != nil){ //going down right
+									sb.append("(");
+
+					next = u.right;
+				}
+
+                else { //going to parent
+					
+					next = u.parent;
+				}
+
+            } 
+			
+			else { // going to parent
+                next = u.parent;
+				
+            }
+
+            prev = u;
+            u = next;
+
+			
+        }
+		sb.append(")");
+		return sb1.toString() + "\nbracketSequence() = " + sb.toString() ;
 	}
 
 	protected void bracketSequenceHelper(Node u, StringBuilder sb){
