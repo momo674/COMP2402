@@ -352,9 +352,9 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 	public String bracketSequence() {
 		if (r == nil) {return ".";}
 
-		StringBuilder sb1 = new StringBuilder();
+		//StringBuilder sb1 = new StringBuilder();
         Node u = r, prev = nil, next;
-		bracketSequenceHelper(u, sb1);
+		//bracketSequenceHelper(u, sb1);
 		StringBuilder sb = new StringBuilder();
 		sb.append("(");
 
@@ -370,7 +370,7 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 				
 
                 else if (u.right != nil){ //going right
-					sb.append(".");
+					if (u.left == nil){sb.append(".");}
 
 					next = u.right;
 					sb.append("(");
@@ -379,8 +379,15 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 				
 
                 else{ // going to parent
-					sb.append("..)");
+					if (u.right == nil) {
+						sb.append(".");
+					}
+					if (u.left == nil) {
+						sb.append(".");
+					}
 					next = u.parent;
+					sb.append(")");
+
 				}
 
 
@@ -388,19 +395,27 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 			
 			else if (prev == u.left) { //coming up tree from left
                 if (u.right != nil){ //going down right
-									sb.append("(");
+					sb.append("(");
 
 					next = u.right;
 				}
 
                 else { //going to parent
 					
+					if (u.right == nil) {
+						sb.append(".");
+					}
+					if (u.left == nil) {
+						sb.append(".");
+					}
+					next = u.parent;
+					sb.append(")");
 					next = u.parent;
 				}
-
             } 
 			
 			else { // going to parent
+				sb.append(")");
                 next = u.parent;
 				
             }
@@ -410,8 +425,8 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 
 			
         }
-		sb.append(")");
-		return sb1.toString() + "\nbracketSequence() = " + sb.toString() ;
+		//sb.append(")");
+		return sb.toString() ;
 	}
 
 	protected void bracketSequenceHelper(Node u, StringBuilder sb){
