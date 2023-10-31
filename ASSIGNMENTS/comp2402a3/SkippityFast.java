@@ -1,8 +1,10 @@
 package comp2402a3;
 
 import java.lang.reflect.Array;
-import java.util.*;
-
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Random;
 
 /**
  * An implementation of skiplists for searching
@@ -12,8 +14,6 @@ import java.util.*;
  */
 public class SkippityFast<T> implements IndexedSSet<T> {
 	protected Comparator<T> c;
-	private TreeSet<T> bst;
-	
 
 	@SuppressWarnings("unchecked")
 	protected static class Node<T> {
@@ -59,8 +59,6 @@ public class SkippityFast<T> implements IndexedSSet<T> {
 
 	@SuppressWarnings("unchecked")
 	public SkippityFast(Comparator<T> c) {
-		this.bst = new TreeSet<>(c);
-
 		this.c = c;
 		n = 0;
 		sentinel = new Node<T>(null, 32);
@@ -175,7 +173,6 @@ public class SkippityFast<T> implements IndexedSSet<T> {
 
 	
 	public boolean add(T x) {
-		bst.add(x);
 		Node<T> u = sentinel;
 		int r = h;
 		int comp = 0;
@@ -217,8 +214,6 @@ public class SkippityFast<T> implements IndexedSSet<T> {
 	}
 
 	public boolean remove(T x) {
-				bst.remove(x);
-
 		boolean removed = false;
 		Node<T> u = sentinel;
 		int r = h;
@@ -261,47 +256,39 @@ public class SkippityFast<T> implements IndexedSSet<T> {
 			x = y;
 			y = temp;
 		}
-	
-		int count = 0;
-		Node<T> u = sentinel;
-		int r = h;
-		int rank = -1; // Initialize rank
-	
-		while (r >= 0) {
-			while (u.next[r] != null && c.compare(u.next[r].x, x) < 0) {
-				// Update rank while moving to the right
-				rank += u.length[r];
-				u = u.next[r];
+
+		T find_x = find(x);
+		T find_y = find(y);
+
+		if (find_y == null) {
+			return rank(y) - rank (x);
+
+		}
+		if (c.compare(find_y,y) != 0) {
+				//y is not in set
+				return rank(y) - rank (x);
+
 			}
-	
-			r--; // Go down into list r-1
-		}
-	
-		// Now u is the largest node with u.x < x or the sentinel
-		u = u.next[0];
-	
-		while (u != null && c.compare(u.x, y) <= 0) {
-			// If u is within the range [x, y], add its count to the total
-			count += u.length[0];
-			u = u.next[0];
-		}
-	
-		return count;
+		
+
+		
+		return rank(y) - rank (x) + 1;
+		
+
+		
+
 	}
+
+		
 	
-
-
-
-
-
 	
-
-
 	public void clear() {
 		n = 0;
 		h = 0;
 		Arrays.fill(sentinel.next, null);
 	}
+
+
 
 	public int size() {
 		return n;
@@ -316,6 +303,9 @@ public class SkippityFast<T> implements IndexedSSet<T> {
 	 * @param u
 	 * @return
 	 */
+
+	
+	
 	protected Iterator<T> iterator(Node<T> u) {
 		class SkiplistIterator implements Iterator<T> {
 			Node<T> u, prev;
@@ -341,6 +331,12 @@ public class SkippityFast<T> implements IndexedSSet<T> {
 
 	public Iterator<T> iterator() {
 		return iterator(sentinel);
+	}
+
+	public int rank(T x) {
+		Pair pair = findPredNode2(x);
+		return pair.i + 1;
+		//if one of items is not in set, minus 1 rangecount
 	}
 
 	public Iterator<T> iterator(T x) {

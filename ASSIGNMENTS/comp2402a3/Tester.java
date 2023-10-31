@@ -27,9 +27,9 @@ public class Tester {
 
         System.out.println("size()=" + iss.size());
 
-        for (int i = 0; i < iss.size(); i++) {
-            System.out.println("get(" + i + ")=" + iss.get(i));
-        }
+        // for (int i = 0; i < iss.size(); i++) {
+        //     System.out.println("get(" + i + ")=" + iss.get(i));
+        // }
 
         for (int i = 0; i < 10; i++) {
             int x = rand.nextInt(3*n);
@@ -49,7 +49,7 @@ public class Tester {
     }
 
     public static void main(String[] args) {
-        skippityTest(150000);
+        skippityTest(20);
         treeTest(20);
     }
 }
