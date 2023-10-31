@@ -17,7 +17,7 @@ public class Tester {
 
     static void skippityTest(int n){
         Random rand = new Random();
-        IndexedSSet<Integer> iss = new SkippitySlow<>();
+        IndexedSSet<Integer> iss = new SkippityFast<>();
         for (int i = 0; i < n; i++) {
             int x = rand.nextInt(3*n);
             System.out.println("add(" + x + ") = " + iss.add(x));
@@ -49,7 +49,7 @@ public class Tester {
     }
 
     public static void main(String[] args) {
-        //skippityTest(20);
+        skippityTest(150000);
         treeTest(20);
     }
 }
