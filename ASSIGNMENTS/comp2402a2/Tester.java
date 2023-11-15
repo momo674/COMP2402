@@ -113,7 +113,7 @@ public class Tester {
   //   until they are fully implemented.
   //   */
   //   superTest(new SuperFast(), 20);
-    duperTest(new DuperFast(), 100);
+    duperTest(new DuperFast(), 120);
 
     // ArrayDeque<Integer> d = new ArrayDeque<>();
     // d.addFirst(1);
